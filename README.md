@@ -119,15 +119,14 @@ npm run start
 
 ---
 
-## 🎨 Filosofi Desain (Aesthetic Guidelines)
+<!-- ## 🎨 Filosofi Desain (Aesthetic Guidelines)
 
 - **Vibrant & Harmonious Colors**: Kombinasi warna *Emerald* (`#059669`) sebagai identitas perkebunan sawit modern, berpadu dengan *Midnight Slate* (`#0F172A`) dan *Snow White* (`#F8FAFC`).
 - **Liquid Glass Effect**: Pemanfaatan *backdrop-filter* dan *blur view* transparan dengan border siluet (`#A7F3D0`) untuk memisahkan navigasi dan konten utama.
-- **Zero Placeholder & Premium Polish**: Setiap tombol, modal konfirmasi, dan notifikasi (*Bottom Toast*) dibuat dengan animasi halus (*micro-animations*) untuk kenyamanan maksimal pengguna.
+- **Zero Placeholder & Premium Polish**: Setiap tombol, modal konfirmasi, dan notifikasi (*Bottom Toast*) dibuat dengan animasi halus (*micro-animations*) untuk kenyamanan maksimal pengguna. -->
 
 ---
 
 <div align="center">
-  <p>Dikembangkan dengan ❤️ untuk kemajuan industri perkebunan kelapa sawit digital.</p>
-  <p><b>© 2026 SawitTracker Enterprise</b></p>
+  <p><b>© 2026 SawitTracker</b></p>
 </div>
