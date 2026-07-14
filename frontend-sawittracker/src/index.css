@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white;
+  }
+}
+
+/* Custom scrollbar untuk tampilan modern & bersih */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
+/* =======================================================
+   PRINT STYLES FOR CORPORATE OFFICIAL PDF (KOP SURAT & TTD)
+   ======================================================= */
+.print-only {
+  display: none;
+}
+
+@media print {
+  /* Sembunyikan Sidebar, Header Utama web, dan elemen bersandi no-print */
+  aside, 
+  header, 
+  .no-print {
+    display: none !important;
+  }
+
+  /* Munculkan elemen khusus cetak (Kop Surat & Footer Tanda Tangan) */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Reset layout agar pas di kertas A4 tanpa terpotong atau scroll */
+  body, 
+  main, 
+  .max-w-7xl {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow: visible !important;
+    background: white !important;
+    color: #0f172a !important;
+  }
+
+  /* Hapus shadow dan border kotak yang tidak perlu saat di kertas */
+  .print-container {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Paksa browser mencetak warna badge & background (exact color matching) */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Cegah tabel terpotong di tengah baris pada saat ganti halaman */
+  tr {
+    page-break-inside: avoid;
+  }
+
+  /* Garis tabel formal korporat (Standar Akuntansi & PKS) */
+  .print-table,
+  .print-table th,
+  .print-table td {
+    border: 1px solid #000000 !important;
+    border-collapse: collapse !important;
+  }
+}
