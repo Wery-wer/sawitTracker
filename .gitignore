@@ -20,3 +20,4 @@ yarn-error.log*
 # Node / Dependencies fallback
 node_modules/
 vendor/
+.claude/
