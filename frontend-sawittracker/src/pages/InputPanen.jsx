@@ -56,9 +56,6 @@ const InputPanen = () => {
       const response = await api.get('/farmers');
       const data = response.data?.data || response.data || [];
       setFarmers(data);
-      if (data.length > 0 && !selectedFarmerId) {
-        setSelectedFarmerId(data[0].id);
-      }
     } catch (error) {
       if (error.response && error.response.status === 401) return; // Biarkan interceptor api.js me-redirect ke login
       console.error('Error fetching farmers for input:', error);
@@ -141,7 +138,12 @@ const InputPanen = () => {
   // 2. SUBMIT TRANSAKSI KE POSTGRESQL (POST /api/transactions)
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedFarmer || brutoNum <= 0 || isTarraInvalid) return;
+    if (!selectedFarmer) {
+      setToastMessage('⚠️ Harap pilih Pemilik Kebun / Petani terlebih dahulu!');
+      setTimeout(() => setToastMessage(null), 5000);
+      return;
+    }
+    if (brutoNum <= 0 || isTarraInvalid) return;
 
     if (farmerDebt > 0 && deductDebt === null) {
       setToastMessage('⚠️ Harap pilih Opsi Potongan Kasbon (Potong Kasbon atau Bayar Penuh) terlebih dahulu!');
@@ -204,6 +206,7 @@ const InputPanen = () => {
 
   // Reset Form
   const handleReset = () => {
+    setSelectedFarmerId('');
     setBruto('');
     setTarra('');
     setNotes('');
@@ -286,14 +289,17 @@ const InputPanen = () => {
                 {farmers.length === 0 ? (
                   <option value="">Belum ada data petani di database</option>
                 ) : (
-                  farmers.map((f) => {
-                    const debtVal = Number(f.total_debt || f.debt || 0);
-                    return (
-                      <option key={f.id} value={f.id}>
-                        {f.name} — {debtVal > 0 ? `Utang: Rp ${debtVal.toLocaleString('id-ID')}` : 'Bebas Utang'}
-                      </option>
-                    );
-                  })
+                  <>
+                    <option value="" disabled>-- Pilih Pemilik Kebun --</option>
+                    {farmers.map((f) => {
+                      const debtVal = Number(f.total_debt || f.debt || 0);
+                      return (
+                        <option key={f.id} value={f.id}>
+                          {f.name} — {debtVal > 0 ? `Utang: Rp ${debtVal.toLocaleString('id-ID')}` : 'Bebas Utang'}
+                        </option>
+                      );
+                    })}
+                  </>
                 )}
               </select>
             )}

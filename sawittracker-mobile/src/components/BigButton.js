@@ -3,13 +3,14 @@ import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SIZES, SHADOWS, FONTS } from '../constants/theme';
 
-export default function BigButton({ title, onPress, style, textStyle, variant = 'primary', icon = null }) {
+export default function BigButton({ title, onPress, style, textStyle, variant = 'primary', icon = null, testID }) {
   const isPrimary = variant === 'primary';
   const isDanger = variant === 'danger';
   
   if (isPrimary) {
     return (
       <TouchableOpacity
+        testID={testID}
         activeOpacity={0.85}
         style={[styles.container, SHADOWS.card, style]}
         onPress={onPress}
@@ -31,6 +32,7 @@ export default function BigButton({ title, onPress, style, textStyle, variant = 
 
   return (
     <TouchableOpacity
+      testID={testID}
       activeOpacity={0.8}
       style={[
         styles.secondaryButton,

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, SafeAreaView, ScrollView, Alert, KeyboardAvoidingView, Platform, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, SafeAreaView, ScrollView, Alert, KeyboardAvoidingView, Platform, TouchableOpacity, ActivityIndicator, Modal, Animated, Easing } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -31,6 +31,32 @@ export default function InputPanenScreen({ navigation }) {
   // Refs untuk auto-focus
   const brutoRef = useRef(null);
   const tarraRef = useRef(null);
+  const modalTranslateY = useRef(new Animated.Value(900)).current;
+
+  // Animasi spring / jiggle saat modal pilih petani dibuka & ditutup
+  useEffect(() => {
+    if (modalVisible) {
+      modalTranslateY.setValue(900);
+      Animated.spring(modalTranslateY, {
+        toValue: 0,
+        friction: 7,
+        tension: 28,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [modalVisible]);
+
+  const handleCloseModal = (onDone) => {
+    Animated.timing(modalTranslateY, {
+      toValue: 900,
+      duration: 220,
+      easing: Easing.in(Easing.cubic),
+      useNativeDriver: true,
+    }).start(() => {
+      setModalVisible(false);
+      if (typeof onDone === 'function') onDone();
+    });
+  };
 
   const [hargaSatuan, setHargaSatuan] = useState(2500);
 
@@ -72,7 +98,6 @@ export default function InputPanenScreen({ navigation }) {
         const parsedFarmers = JSON.parse(cachedData);
         if (parsedFarmers.length > 0) {
           setFarmers(parsedFarmers);
-          setSelectedFarmer(parsedFarmers[0]);
         }
       }
 
@@ -81,7 +106,6 @@ export default function InputPanenScreen({ navigation }) {
       const dataFarmers = response.data.data || [];
       setFarmers(dataFarmers);
       if (dataFarmers.length > 0) {
-        setSelectedFarmer(dataFarmers[0]);
         // 3. Simpan data terbaru dari Cloud ke dalam memori HP untuk dipakai saat offline!
         await AsyncStorage.setItem('cached_farmers_list', JSON.stringify(dataFarmers));
       }
@@ -92,20 +116,7 @@ export default function InputPanenScreen({ navigation }) {
       if (cachedData) {
         const parsedFarmers = JSON.parse(cachedData);
         setFarmers(parsedFarmers);
-        if (parsedFarmers.length > 0) setSelectedFarmer(parsedFarmers[0]);
-      } 
-      // else {
-      //   // Fallback terakhir jika HP baru pertama kali diinstall & tanpa sinyal
-      //   const fallbackFarmers = [
-      //     { id: 1, name: 'Haji Subianto', phone: '0812-3456-7890', total_debt: 1500000 },
-      //     { id: 2, name: 'Pak Budi Santoso', phone: '0813-2233-4455', total_debt: 0 },
-      //     { id: 3, name: 'Ibu Ratna Wati', phone: '0815-6677-8899', total_debt: 2000000 },
-      //     { id: 4, name: 'Pak Hendra Kurniawan', phone: '0811-9988-7766', total_debt: 3250000 },
-      //     { id: 5, name: 'Pak Asep Saepudin', phone: '0852-1122-3344', total_debt: 500000 }
-      //   ];
-      //   setFarmers(fallbackFarmers);
-      //   setSelectedFarmer(fallbackFarmers[0]);
-      // }
+      }
     } finally {
       setLoadingFarmers(false);
     }
@@ -215,7 +226,11 @@ export default function InputPanenScreen({ navigation }) {
         <ScrollView 
           contentContainerStyle={[
             styles.content, 
-            { paddingTop: Math.max(insets.top + 92, 142) }
+            { 
+              paddingTop: Math.max(insets.top + 92, 142),
+              paddingBottom: Math.max(insets.bottom + 12, 16),
+              flexGrow: 1,
+            }
           ]} 
           showsVerticalScrollIndicator={false} 
           keyboardShouldPersistTaps="handled"
@@ -242,6 +257,7 @@ export default function InputPanenScreen({ navigation }) {
               </View>
             ) : (
               <TouchableOpacity 
+                testID="btn-pilih-petani"
                 activeOpacity={0.8}
                 style={styles.customSelector}
                 onPress={() => setModalVisible(true)}
@@ -251,8 +267,8 @@ export default function InputPanenScreen({ navigation }) {
                     <Text style={styles.farmerIconText}>👨‍🌾</Text>
                   </View>
                   <View>
-                    <Text style={styles.selectorLabel}>Nama Petani / Kebun:</Text>
-                    <Text style={styles.selectorValue}>
+                    {/* <Text style={styles.selectorLabel}>{selectedFarmer ? selectedFarmer.name : 'Plih Nama Petani'}</Text> */}
+                    <Text style={styles.label}>
                       {selectedFarmer ? selectedFarmer.name : 'Pilih Petani...'}
                     </Text>
                     {selectedFarmer?.phone && (
@@ -282,6 +298,7 @@ export default function InputPanenScreen({ navigation }) {
               >
                 <MaterialCommunityIcons name="weight-kilogram" size={24} color={isFocusedBruto ? COLORS.primary : COLORS.textMuted} style={styles.inputIcon} />
                 <TextInput
+                  testID="input-bruto"
                   ref={brutoRef}
                   style={styles.inputNumeric}
                   placeholder="0"
@@ -309,6 +326,7 @@ export default function InputPanenScreen({ navigation }) {
               >
                 <MaterialCommunityIcons name="truck-outline" size={24} color={isFocusedTarra ? COLORS.primary : COLORS.textMuted} style={styles.inputIcon} />
                 <TextInput
+                  testID="input-tarra"
                   ref={tarraRef}
                   style={styles.inputNumeric}
                   placeholder="0"
@@ -362,6 +380,7 @@ export default function InputPanenScreen({ navigation }) {
                     flexDirection: 'row', gap: 10
                   }}>
                     <TouchableOpacity
+                      testID="btn-potong-kasbon"
                       activeOpacity={0.85}
                       onPress={() => setDeductDebt(true)}
                       style={{
@@ -434,7 +453,13 @@ export default function InputPanenScreen({ navigation }) {
               {/* Baris Total Kotor */}
               <View style={[styles.calcRow, { marginBottom: 8 }]}>
                 <Text style={{ ...FONTS.semibold, color: '#64748B', fontSize: 13 }}>Total Kotor (Gross)</Text>
-                <Text style={{ ...FONTS.bold, color: '#0F172A', fontSize: 14 }} adjustsFontSizeToFit numberOfLines={1}>{formatRupiah(totalHarga)}</Text>
+                <Text style={{ ...FONTS.bold, color: '#0F172A', fontSize: 14}} adjustsFontSizeToFit numberOfLines={1}>{formatRupiah(totalHarga)}</Text>
+              </View>
+
+              {/* Baris Harga TBS hari ini */}
+              <View style={[styles.calcRow, { marginBottom: 8 }]}>
+                <Text style={{ ...FONTS.semibold, color: '#64748B', fontSize: 13 }}>Harga TBS hari ini</Text>
+                <Text style={{ ...FONTS.bold, color: '#f40808ff', fontSize: 14 }} adjustsFontSizeToFit numberOfLines={1}>{formatRupiah(hargaSatuan)} / KG</Text>
               </View>
 
               {/* Baris Potongan Kasbon */}
@@ -453,9 +478,9 @@ export default function InputPanenScreen({ navigation }) {
               <View style={styles.totalSection}>
                 <View style={styles.totalHeaderRow}>
                   <Text style={styles.calcLabelTotal}>Total Bersih Dibayarkan</Text>
-                  <View style={styles.pricePill}>
+                  {/* <View style={styles.pricePill}>
                     <Text style={styles.pricePillText}>Rp {formatNumber(hargaSatuan)} / KG</Text>
-                  </View>
+                  </View> */}
                 </View>
                 <Text style={styles.totalPriceText} numberOfLines={1} adjustsFontSizeToFit>
                   {formatRupiah(totalNettoBayar)}
@@ -471,6 +496,7 @@ export default function InputPanenScreen({ navigation }) {
               </View>
             ) : (
               <BigButton 
+                testID="btn-simpan"
                 title="Simpan" 
                 onPress={handleSimpan}
                 style={{ marginTop: 24 }}
@@ -492,16 +518,23 @@ export default function InputPanenScreen({ navigation }) {
 
       {/* MODAL PILIH PETANI (MODERN BOTTOM SHEET / CARD LIST) */}
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={() => handleCloseModal()}
       >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContainer, SHADOWS.card]}>
+        <TouchableOpacity 
+          activeOpacity={1} 
+          style={styles.modalOverlay}
+          onPress={() => handleCloseModal()}
+        >
+          <Animated.View 
+            onStartShouldSetResponder={() => true}
+            style={[styles.modalContainer, SHADOWS.card, { transform: [{ translateY: modalTranslateY }] }]}
+          >
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Pilih Pemilik Kebun</Text>
-              <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeBtn}>
+              <TouchableOpacity onPress={() => handleCloseModal()} style={styles.closeBtn}>
                 <Ionicons name="close" size={24} color={COLORS.textSilver} />
               </TouchableOpacity>
             </View>
@@ -511,11 +544,12 @@ export default function InputPanenScreen({ navigation }) {
                 return (
                   <TouchableOpacity
                     key={item.id}
+                    testID={`item-petani-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                     activeOpacity={0.8}
                     style={[styles.modalItem, isSelected && styles.modalItemSelected]}
                     onPress={() => {
                       setSelectedFarmer(item);
-                      setModalVisible(false);
+                      handleCloseModal();
                     }}
                   >
                     <View style={styles.modalItemLeft}>
@@ -541,12 +575,12 @@ export default function InputPanenScreen({ navigation }) {
 
             <TouchableOpacity
               style={styles.modalCancelBtn}
-              onPress={() => setModalVisible(false)}
+              onPress={() => handleCloseModal()}
             >
               <Text style={styles.modalCancelText}>Tutup</Text>
             </TouchableOpacity>
-          </View>
-        </View>
+          </Animated.View>
+        </TouchableOpacity>
       </Modal>
 
       {/* MODAL SUKSES TRANSAKSI (PROFESSIONAL RECEIPT DIALOG) */}
@@ -617,9 +651,13 @@ export default function InputPanenScreen({ navigation }) {
             </View>
 
             <BigButton
+              testID="btn-selesai"
               title="Selesai & Kembali"
               onPress={() => {
                 setSuccessData(null);
+                setSelectedFarmer(null);
+                setBruto('');
+                setTarra('');
                 navigation.goBack();
               }}
               style={{ width: '100%', marginTop: 20 }}
@@ -718,8 +756,9 @@ const styles = StyleSheet.create({
     color: '#059669',
   },
   content: {
-    padding: 24,
-    paddingBottom: 60,
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 16,
   },
   header: {
     marginBottom: 24,
@@ -755,9 +794,12 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.card,
     borderRadius: SIZES.radiusLarge,
-    padding: 24,
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 20,
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
+    flexGrow: 1,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -1001,8 +1043,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
-    padding: 24,
-    maxHeight: '80%',
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 70,
+    marginBottom: -46,
+    maxHeight: '85%',
     borderWidth: 1,
     borderColor: '#E2E8F0',
   },

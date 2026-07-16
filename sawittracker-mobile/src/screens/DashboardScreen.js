@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, StatusBar, ScrollView, Alert, TouchableOpacity, ActivityIndicator, RefreshControl, Modal, Platform } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -34,6 +34,23 @@ export default function DashboardScreen({ navigation, route }) {
     } finally {
       setLoading(false);
       setRefreshing(false);
+    }
+  };
+
+  const [hargaSatuan, setHargaSatuan] = useState(2500);
+
+  useEffect(() => {
+    fetchHargaSawit();
+  }, []);
+
+  const fetchHargaSawit = async () => {
+    try {
+      const res = await api.get('/harga-sawit');
+      if (res.data?.data?.harga_sawit) {
+        setHargaSatuan(Number(res.data.data.harga_sawit));
+      }
+    } catch (error) {
+      console.error('Gagal mengambil harga sawit dari server di mobile:', error);
     }
   };
 
@@ -92,9 +109,9 @@ export default function DashboardScreen({ navigation, route }) {
         ]}
       >
         <View style={styles.userSection}>
-          <View style={styles.avatar}>
+          {/* <View style={styles.avatar}>
             <Text style={styles.avatarText}>👨‍🌾</Text>
-          </View>
+          </View> */}
           <View>
             <Text style={styles.welcomeLabel}>Selamat Datang,</Text>
             <Text style={styles.userName}>{userName}</Text>
@@ -143,7 +160,7 @@ export default function DashboardScreen({ navigation, route }) {
               </View>
               <View style={styles.statPill}>
                 <MaterialCommunityIcons name="truck-outline" size={16} color="#FFFFFF" />
-                <Text style={styles.statPillText}>{totalTruk} Transaksi Masuk</Text>
+                <Text style={styles.statPillText}>{formatRupiah(hargaSatuan)}/KG TBS</Text>
               </View>
             </View>
           </LinearGradient>
@@ -154,6 +171,7 @@ export default function DashboardScreen({ navigation, route }) {
 
         {/* Action Card 1: Input Panen */}
         <TouchableOpacity
+          testID="btn-input-panen"
           activeOpacity={0.8}
           style={[styles.actionCard, SHADOWS.card]}
           onPress={() => navigation.navigate('InputPanen')}

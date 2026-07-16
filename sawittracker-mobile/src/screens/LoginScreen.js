@@ -96,6 +96,7 @@ export default function LoginScreen({ navigation }) {
               >
                 <Ionicons name="mail-outline" size={20} color={isFocusedEmail ? COLORS.primary : COLORS.textMuted} style={styles.inputIcon} />
                 <TextInput
+                  testID="input-email"
                   ref={emailRef}
                   style={styles.input}
                   placeholder="admin@sawittracker.com"
@@ -125,6 +126,7 @@ export default function LoginScreen({ navigation }) {
               >
                 <Ionicons name="lock-closed-outline" size={20} color={isFocusedPass ? COLORS.primary : COLORS.textMuted} style={styles.inputIcon} />
                 <TextInput
+                  testID="input-password"
                   ref={passRef}
                   style={styles.input}
                   placeholder="Masukkan kata sandi..."
@@ -158,6 +160,7 @@ export default function LoginScreen({ navigation }) {
               </View>
             ) : (
               <BigButton 
+                testID="btn-login"
                 title="Masuk" 
                 onPress={handleLogin}
                 style={{ marginTop: 10 }}
