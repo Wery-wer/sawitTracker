@@ -9,10 +9,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge)](./LICENSE)
 [![Status](https://img.shields.io/badge/Status-Production%20Ready-059669?style=for-the-badge)]()
 
-<p align="center">
-  <b>Solusi Digital Modern & Enterprise untuk Pencatatan Timbangan Panen, Manajemen Utang/Kasbon Petani, dan Analitik Keuangan Perkebunan Kelapa Sawit secara Real-Time across Web & Mobile.</b>
-</p>
-
 </div>
 
 ---
