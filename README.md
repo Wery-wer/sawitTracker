@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌾 SawitTracker
+# SawitTracker
 ### **Sistem Manajemen Panen Kelapa Sawit**
 
 [![Laravel](https://img.shields.io/badge/Backend-Laravel%2011%20%2F%20PHP%208.2+-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](./backend-sawittracker)
@@ -40,13 +40,13 @@
 - **Trend Indicators**: Indikator persentase pertumbuhan performa harian/bulanan dengan visualisasi yang interaktif.
 - **Glassmorphism Navigation**: Header dan *sidebar* bernuansa kaca cair yang memberikan kesan mewah namun tetap cepat dan ringan.
 
-### 📱 4. Ekosistem (Web & Mobile )
+### 4. Ekosistem (Web & Mobile )
 - **Standardisasi Tipografi Enterprise**: Sinkronisasi antara sistem font di Web (`font-sans` Tailwind) dan Mobile (`SF Pro` di iOS & `Roboto` di Android).
 - **Sinkronisasi API Terpusat**: Satu *backend API* yang melayani Web Dashboard dan Mobile Application secara simultan dengan autentikasi `Sanctum` yang aman.
 
 ---
 
-## 🛠️ Arsitektur & Teknologi
+## Arsitektur & Teknologi
 
 | Pilar | Teknologi Utama | Folder | Deskripsi |
 | :--- | :--- | :--- | :--- |
