@@ -1,7 +1,7 @@
 <div align="center">
 
 # 🌾 SawitTracker
-### **Sistem Manajemen Panen Kelapa Sawit & Kasbon Mitra Tani Terpadu**
+### **Sistem Manajemen Panen Kelapa Sawit**
 
 [![Laravel](https://img.shields.io/badge/Backend-Laravel%2011%20%2F%20PHP%208.2+-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](./backend-sawittracker)
 [![React](https://img.shields.io/badge/Web%20Dashboard-React%20%2B%20Vite%20%2B%20Tailwind-61DAFB?style=for-the-badge&logo=react&logoColor=black)](./frontend-sawittracker)
@@ -17,31 +17,31 @@
 
 ---
 
-## ✨ Tentang SawitTracker
+## Tentang SawitTracker
 
 **SawitTracker** adalah platform *Full-Stack Monorepo* yang dirancang khusus untuk meningkatkan transparansi, efisiensi, dan akurasi operasional bagi pengepul (RAM), koperasi, dan perkebunan kelapa sawit. Mengusung filosofi desain **Modern Enterprise UI/UX** dengan sentuhan **Liquid Glassmorphism**, sistem ini memastikan kenyamanan operasional admin di kantor (*Web Dashboard*) maupun lapangan (*Mobile App*).
 
 ---
 
-## 🚀 Fitur Unggulan
+## Fitur Unggulan
 
-### ⚖️ 1. Input Timbangan Panen Presisi (Live Calculation)
+### 1. Input Timbangan Panen Presisi
 - **Perhitungan Otomatis Bruto - Tarra = Netto**: Kalkulasi instan berat bersih sawit.
 - **Fintech Receipt Card Experience**: Ringkasan rincian panen transparan yang menyerupai struk transaksi perbankan digital.
 - **Validasi Data Lapangan**: Pencegahan duplikasi dan pemantauan harga satuan (`Rp/KG`) real-time.
 
-### 💳 2. Manajemen Utang & Kasbon Cerdas (Smart Debt Management)
+### 2. Manajemen Utang & Kasbon Cerdas (Smart Debt Management)
 - **Opsi Potongan Kasbon Manual & Otomatis**: Logika pintar untuk memotong utang petani secara otomatis (*Potong Kasbon*) atau pembayaran utuh (*Bayar Penuh*).
 - **Auto-Disable & Safety Guard**: Petani tanpa utang/kasbon (`Rp 0`) secara otomatis diatur ke status *Bebas Kasbon* untuk mencegah kesalahan admin.
 - **Riwayat Transaksi Transparan**: Setiap potongan terunggah dan memotong saldo kasbon petani secara sinkron di database.
 
-### 📊 3. Executive Dashboard & Real-Time Analytics
+### 3. Executive Dashboard & Real-Time Analytics
 - **Hero Analytics Card**: Pantauan total pengeluaran pembayaran panen, total tonase neto (`KG Netto`), dan jumlah transaksi harian.
 - **Trend Indicators**: Indikator persentase pertumbuhan performa harian/bulanan dengan visualisasi yang interaktif.
 - **Glassmorphism Navigation**: Header dan *sidebar* bernuansa kaca cair yang memberikan kesan mewah namun tetap cepat dan ringan.
 
-### 📱 4. Ekosistem Lintas Platform yang Harmonis (Web & Mobile Sync)
-- **Standardisasi Tipografi Enterprise**: Sinkronisasi sempurna antara sistem font di Web (`font-sans` Tailwind) dan Mobile (`SF Pro` di iOS & `Roboto` di Android) dengan proporsi *letter spacing* dan *font weight* presisi.
+### 📱 4. Ekosistem (Web & Mobile )
+- **Standardisasi Tipografi Enterprise**: Sinkronisasi antara sistem font di Web (`font-sans` Tailwind) dan Mobile (`SF Pro` di iOS & `Roboto` di Android).
 - **Sinkronisasi API Terpusat**: Satu *backend API* yang melayani Web Dashboard dan Mobile Application secara simultan dengan autentikasi `Sanctum` yang aman.
 
 ---
@@ -50,13 +50,13 @@
 
 | Pilar | Teknologi Utama | Folder | Deskripsi |
 | :--- | :--- | :--- | :--- |
-| **🧠 Backend API** | **Laravel 11**, PHP 8.2+, MySQL / PostgreSQL, Sanctum | `backend-sawittracker/` | RESTful API kuat dengan validasi ketat, relasi database optimal, dan manajemen autentikasi. |
-| **💻 Web Dashboard** | **React 18**, Vite, **Tailwind CSS**, Lucide Icons | `frontend-sawittracker/` | Dashboard web responsif berstandar enterprise untuk admin RAM dan manajemen keuangan. |
-| **📱 Mobile App** | **React Native**, **Expo**, React Navigation, BlurView | `sawittracker-mobile/` | Aplikasi seluler berkinerja tinggi berdesain iOS/Android native untuk penginputan panen di lapangan. |
+| **Backend API** | **Laravel 11**, PHP 8.2+, MySQL / PostgreSQL, Sanctum | `backend-sawittracker/` | RESTful API ketat, relasi database optimal, dan manajemen autentikasi. |
+| **Web Dashboard** | **React 18**, Vite, **Tailwind CSS**, Lucide Icons | `frontend-sawittracker/` | Dashboard web responsif untuk admin RAM dan manajemen keuangan. |
+| **Mobile App** | **React Native**, **Expo**, React Navigation, BlurView | `sawittracker-mobile/` | Aplikasi seluler iOS/Android native untuk penginputan panen di lapangan. |
 
 ---
 
-## 📂 Struktur Monorepo
+## 📂 Monorepo
 
 ```bash
 sawitTracker/
@@ -69,7 +69,7 @@ sawitTracker/
 
 ---
 
-## ⚡ Panduan Instalasi & Quick Start
+## Panduan Instalasi & Quick Start
 
 ### 1. Persiapan Database & Backend API
 ```bash
